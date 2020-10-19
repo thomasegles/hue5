@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 /* Please enter here an answer to task four between the tags:
  * <answerTask4>
  *    Hier sollte die Antwort auf die Aufgabe 4 stehen.
+
  * </answerTask4>
  */
 public class SudokuSolver implements ISodukoSolver {
@@ -41,20 +42,42 @@ public class SudokuSolver implements ISodukoSolver {
 
     @Override
     public boolean checkSudoku(int[][] rawSudoku) {
-        int row = 0;
-        int col = 0;
-        int rowVal = 0;
-        int colVal = 0;
-        for (int i = 0; i < 9; i++) {
-            for (int j = rowVal; j < row; j++) {
-                for (int k = colVal; k < col; k++) {
-                    //code
+        // row checker
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 8; col++) {
+                for (int col2 = col + 1; col2 < 9; col2++) {
+                    if (rawSudoku[row][col] == rawSudoku[row][col2]) {
+                        return false;
+                    }
                 }
-                col = 0;
-                row++;
             }
         }
-        return false; // delete this line!
+
+        // column checker
+        for (int col = 0; col < 9; col++) {
+            for (int row = 0; row < 8; row++) {
+                for (int row2 = row + 1; row2 < 9; row2++) {
+                    if (rawSudoku[row][col] == rawSudoku[row2][col]) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // grid checker
+        for (int row = 0; row < 9; row += 3) {
+            for (int col = 0; col < 9; col += 3) // row, col is start of the 3 by 3 grid
+            {
+                for (int pos = 0; pos < 8; pos++) {
+                    for (int pos2 = pos + 1; pos2 < 9; pos2++) {
+                        if (rawSudoku[row + pos % 3][col + pos / 3] == rawSudoku[row + pos2 % 3][col + pos2 / 3]) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     @Override
